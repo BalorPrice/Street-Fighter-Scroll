@@ -1,0 +1,21 @@
+I made 4 names for poke addresses:
+	scr_ctrl (scroll control):  32848
+	scr_os (offset):  32849 (2 bytes)
+	scr_page1 (page of screen 1):  32851
+	scr_page2:  32852
+
+First open your two screens for quick buffering, poke page numbers to routine:
+	SCREEN 1: POKE (32851),IN 252 BAND 31
+	SCREEN 2: POKE (32852),IN 252 BAND 31
+
+Load in the screens:
+	FOR c=0 to 2
+	LOAD screen c (left hand side of map) into screen 1 (presumably display 2 while this is happening)
+	POKE (32848),c: CALL 32768
+	NEXT c
+	
+To display:
+	POKE (32849),nn: REM Scroll offset in 4-pixels.  This will be between 512 (extreme left) and 128 (extreme right).  With the Ken level I tested it was 2.5 screens wide, you can go down to 0 but you'll get black screen.
+	POKE (32848),-1  for screen 1, or -2 for screen 2
+	CALL 32768
+
